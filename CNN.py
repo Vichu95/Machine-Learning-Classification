@@ -366,9 +366,9 @@ input_shape = (img_height, img_width, 1)
 model = tf.keras.Sequential([
     tf.keras.layers.Conv2D(32, kernel_size=(3, 3), activation='relu', input_shape=input_shape),
     tf.keras.layers.MaxPooling2D(pool_size=(2, 2)),
-    tf.keras.layers.MaxPooling2D(pool_size=(2, 2)),
+    tf.keras.layers.Dropout(0.2),
     tf.keras.layers.Flatten(),
-    tf.keras.layers.Dense(1500, activation='relu'),
+    tf.keras.layers.Dense(128, activation='relu'),
     tf.keras.layers.Dense(3)
 ])
 
