@@ -344,36 +344,45 @@ ds_class_names = ds_train.class_names
 #  Building NN model
 ####
 input_shape = (img_height, img_width, 1)
-# cnn1 = Sequential()
-# cnn1.add(Conv2D(32, kernel_size=(3, 3), activation='relu', input_shape=input_shape))
-# cnn1.add(MaxPooling2D(pool_size=(2, 2)))
-# cnn1.add(Dropout(0.2))
+# cnn3 = Sequential()
+# cnn3.add(Conv2D(32, kernel_size=(3, 3), activation='relu', input_shape=input_shape))
+# cnn3.add(MaxPooling2D((2, 2)))
+# cnn3.add(Dropout(0.25))
 
-# cnn1.add(Flatten())
+# cnn3.add(Conv2D(64, kernel_size=(3, 3), activation='relu'))
+# cnn3.add(MaxPooling2D(pool_size=(2, 2)))
+# cnn3.add(Dropout(0.25))
 
-# cnn1.add(Dense(128, activation='relu'))
-# cnn1.add(Dense(10, activation='softmax'))
+# cnn3.add(Conv2D(128, kernel_size=(3, 3), activation='relu'))
+# cnn3.add(Dropout(0.4))
 
-# cnn1.compile(loss=tf.keras.losses.categorical_crossentropy,
+# cnn3.add(Flatten())
+
+# cnn3.add(Dense(128, activation='relu'))
+# cnn3.add(Dropout(0.3))
+# cnn3.add(Dense(3, activation='softmax'))
+
+# cnn3.compile(loss=tf.keras.losses.categorical_crossentropy,
               # optimizer=tf.keras.optimizers.Adam(),
               # metrics=['accuracy'])
-    
-# history1 = cnn1.fit(train_data, train_label,
-          # batch_size=10,
-          # epochs=10,
-          # verbose=1)   
 
 model = tf.keras.Sequential([
     tf.keras.layers.Conv2D(32, kernel_size=(3, 3), activation='relu', input_shape=input_shape),
     tf.keras.layers.MaxPooling2D(pool_size=(2, 2)),
-    tf.keras.layers.Dropout(0.2),
+    tf.keras.layers.Dropout(0.25),
+    tf.keras.layers.Conv2D(64, kernel_size=(3, 3), activation='relu'),
+    tf.keras.layers.MaxPooling2D(pool_size=(2, 2)),
+    tf.keras.layers.Dropout(0.25),
+    tf.keras.layers.Conv2D(128, kernel_size=(3, 3), activation='relu'),
+    tf.keras.layers.Dropout(0.4),
     tf.keras.layers.Flatten(),
     tf.keras.layers.Dense(128, activation='relu'),
+    tf.keras.layers.Dropout(0.3),
     tf.keras.layers.Dense(3)
 ])
 
 
-#Compile the built model with the training dataset
+# Compile the built model with the training dataset
 model.compile(optimizer='adam',
               loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
               metrics=['accuracy'])
