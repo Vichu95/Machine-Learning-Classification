@@ -20,7 +20,7 @@ import cv2
 from matplotlib import pyplot as plt
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout, Flatten
-from tensorflow.keras.layers import Conv2D, MaxPooling2D
+from tensorflow.keras.layers import Conv2D, MaxPooling2D,BatchNormalization
 #############################################################################################
 
 
@@ -368,24 +368,48 @@ input_shape = (img_height, img_width, 1)
 
 model = tf.keras.Sequential([
     tf.keras.layers.Conv2D(32, kernel_size=(3, 3), activation='relu', input_shape=input_shape),
+    tf.keras.layers.BatchNormalization(),
+    
+    tf.keras.layers.Conv2D(32, kernel_size=(3, 3), activation='relu'),
+    tf.keras.layers.BatchNormalization(),
     tf.keras.layers.MaxPooling2D(pool_size=(2, 2)),
     tf.keras.layers.Dropout(0.25),
+    
     tf.keras.layers.Conv2D(64, kernel_size=(3, 3), activation='relu'),
+    tf.keras.layers.BatchNormalization(),
+    tf.keras.layers.Dropout(0.25),
+    
+    tf.keras.layers.Conv2D(128, kernel_size=(3, 3), activation='relu'),
+    tf.keras.layers.BatchNormalization(),
     tf.keras.layers.MaxPooling2D(pool_size=(2, 2)),
     tf.keras.layers.Dropout(0.25),
-    tf.keras.layers.Conv2D(128, kernel_size=(3, 3), activation='relu'),
-    tf.keras.layers.Dropout(0.4),
+    
     tf.keras.layers.Flatten(),
+    
+    tf.keras.layers.Dense(512, activation='relu'),
+    tf.keras.layers.BatchNormalization(),
+    tf.keras.layers.Dropout(0.5),
+    
     tf.keras.layers.Dense(128, activation='relu'),
-    tf.keras.layers.Dropout(0.3),
-    tf.keras.layers.Dense(3)
+    tf.keras.layers.BatchNormalization(),
+    tf.keras.layers.Dropout(0.5),
+    
+    tf.keras.layers.Dense(3, activation='softmax')
 ])
 
 
 # Compile the built model with the training dataset
-model.compile(optimizer='adam',
-              loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+# model.compile(optimizer='adam',
+              # loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+              # metrics=['accuracy'])
+              
+model.compile(loss=tf.keras.losses.categorical_crossentropy,
+              optimizer=tf.keras.optimizers.Adam(),
               metrics=['accuracy'])
+
+train_label = tf.keras.utils.to_categorical(train_label, 3)
+test_label = tf.keras.utils.to_categorical(test_label, 3)
+
 
 model.fit(x = train_data, y = train_label,  epochs=15)
 
