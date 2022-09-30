@@ -156,8 +156,12 @@ ds_test = tf.keras.preprocessing.image_dataset_from_directory(
 ds_class_names = ds_test.class_names
 print(ds_class_names)
 
-## Load the weights
+## Load the model along with weights
 model = tf.keras.models.load_model(cd_path + '/TrainedModel/kitchenware_trainedmodel.h5')
+
+## Evluate the accuracy using test set
+test_loss, test_acc = model.evaluate(ds_test, verbose=2)
+print('\nThe test accuracy : ', test_acc)
 
 ###
 # Run the Loop. It checks for the events in the GUI
