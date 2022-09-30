@@ -1,1 +1,1 @@
-python 	kitchenware_classifier_withRL_GUI.py
+python 	Task8_2_Kitchenware_Classifier_Application.py
